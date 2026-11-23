@@ -1,348 +1,618 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AHM Bazaar | Official UK Product Catalog</title>
-  <meta name="description" content="AHM Bazaar – Egyptian handcrafted statues and artifacts. Browse the UK catalog and order via WhatsApp.">
-  <meta property="og:title" content="AHM Bazaar | Egyptian Handcrafted Collection">
-  <meta property="og:description" content="Browse our UK catalog of handcrafted Egyptian statues and order via WhatsApp.">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>𓂀</text></svg>">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg: #f8f6f2; --card: #ffffff; --dark: #1c1917; --gold: #b48a3e;
-      --green: #16a34a; --green-hover: #15803d; --text: #292524;
-      --muted: #78716c; --border: #e7e5e4;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); padding-bottom: 95px; }
-    header { background: var(--dark); color: #fff; padding: 18px 24px; position: sticky; top: 0; z-index: 40; box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
-    .header-inner { max-width: 1320px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; }
-    .brand { font-family: 'Cinzel', serif; font-size: 1.55rem; letter-spacing: 1.5px; color: #f5d799; }
-    .brand span { display: block; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.72rem; letter-spacing: 2px; color: #a8a29e; text-transform: uppercase; }
-    .controls { display: flex; gap: 10px; flex: 1; max-width: 680px; flex-wrap: wrap; }
-    .controls input, .controls select { padding: 10px 14px; border-radius: 8px; border: 1px solid #44403c; background: #292524; color: #fff; font-size: 0.9rem; outline: none; }
-    .controls input { flex: 1; min-width: 200px; }
-    .controls input::placeholder { color: #a8a29e; }
-    .container { max-width: 1320px; margin: 28px auto; padding: 0 20px; }
-    .stats-bar { display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; align-items: center; margin-bottom: 18px; font-size: 0.88rem; color: var(--muted); }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px; }
-    .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s, box-shadow 0.2s; }
-    .card:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(0,0,0,0.08); }
-    .img-wrap { position: relative; background: #141414; aspect-ratio: 1 / 1; cursor: pointer; overflow: hidden; }
-    .img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
-    .card:hover .img-wrap img { transform: scale(1.03); }
-    .sku-badge { position: absolute; top: 12px; left: 12px; background: rgba(28, 25, 23, 0.92); color: #f5d799; border: 1px solid var(--gold); padding: 5px 10px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.5px; }
-    .thumbs { display: flex; gap: 6px; padding: 10px 14px 0; overflow-x: auto; }
-    .thumbs img { width: 44px; height: 44px; object-fit: cover; border-radius: 6px; border: 2px solid transparent; cursor: pointer; background: #141414; flex-shrink: 0; }
-    .thumbs img.active { border-color: var(--gold); }
-    .card-body { padding: 14px 16px 16px; display: flex; flex-direction: column; flex: 1; }
-    .title { font-size: 1.02rem; font-weight: 700; margin-bottom: 8px; line-height: 1.35; }
-    .meta { font-size: 0.84rem; color: var(--muted); margin-bottom: 4px; }
-    .price { font-size: 1.2rem; font-weight: 700; color: var(--dark); margin: 10px 0 14px; }
-    .price.poa { font-size: 0.95rem; color: var(--gold); }
-    .btn-add { margin-top: auto; width: 100%; padding: 11px; border: none; border-radius: 8px; background: var(--dark); color: #fff; font-weight: 600; font-size: 0.85rem; letter-spacing: 0.5px; cursor: pointer; transition: background 0.2s; }
-    .btn-add:hover { background: var(--gold); }
-    .btn-add.added { background: var(--green); }
-    .cart-bar { position: fixed; bottom: 18px; right: 20px; left: 20px; max-width: 600px; margin: 0 auto; background: var(--dark); color: #fff; padding: 14px 20px; border-radius: 14px; display: none; align-items: center; justify-content: space-between; gap: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.28); z-index: 50; }
-    .cart-bar.visible { display: flex; }
-    .btn-wa { background: var(--green); color: #fff; border: none; padding: 10px 16px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer; }
-    .btn-wa:hover { background: var(--green-hover); }
-    .btn-clear { background: #44403c; color: #fff; border: none; padding: 10px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; }
-    .wa-float { position: fixed; right: 20px; bottom: 20px; width: 56px; height: 56px; border-radius: 50%; background: #25d366; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 18px rgba(0,0,0,0.25); z-index: 45; }
-    body.has-cart .wa-float { display: none; }
-    .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.84); z-index: 60; align-items: center; justify-content: center; padding: 20px; }
-    .modal.open { display: flex; }
-    .modal-box { background: #fff; border-radius: 16px; max-width: 860px; width: 100%; overflow: hidden; display: grid; grid-template-columns: 1.2fr 1fr; }
-    @media (max-width: 700px) {
-      .modal-box { grid-template-columns: 1fr; max-height: 90vh; overflow-y: auto; }
-      .btn-wa { padding: 10px 12px; font-size: 0.78rem; }
-    }
-    .modal-img { background: #141414; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px; }
-    .modal-img img#modalMain { max-height: 420px; width: 100%; object-fit: contain; }
-    .modal-info { padding: 24px; display: flex; flex-direction: column; }
-    .close-btn { align-self: flex-end; background: none; border: none; font-size: 1.6rem; cursor: pointer; color: var(--muted); }
-    .loader { text-align: center; padding: 60px 20px; color: var(--muted); }
-    .error-box { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 16px 20px; border-radius: 10px; max-width: 650px; margin: 40px auto; text-align: center; line-height: 1.6; }
-    footer { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 30px 20px 10px; line-height: 1.7; }
-    footer a { color: var(--gold); text-decoration: none; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>AHM Bazaar | The Egyptian Collection – UK Catalogue</title>
+<meta name="description" content="Handcrafted Egyptian statues, ushabti, sistrums and amulets. In stock in the UK. Order on WhatsApp, Etsy or eBay.">
+<meta property="og:title" content="AHM Bazaar | The Egyptian Collection">
+<meta property="og:description" content="149 handcrafted Egyptian pieces, in stock in the UK. Order on WhatsApp, Etsy or eBay.">
+<meta property="og:image" content="https://lh3.googleusercontent.com/d/1RE12-hkm19_VIQdjQdgwOvwFoCbgaWxT=w1200">
+<meta name="theme-color" content="#0c0a08">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230c0a08'/><path d='M32 10a9 9 0 0 1 9 9c0 5-4 8-6 10h11v6H35v19h-6V35H18v-6h11c-2-2-6-5-6-10a9 9 0 0 1 9-9zm0 6a3 3 0 0 0-3 3c0 3 3 6 3 6s3-3 3-6a3 3 0 0 0-3-3z' fill='%23d9b46a'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;1,500;1,600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0c0a08; --ink2:#15120e; --ink3:#1e1a15; --line:rgba(217,180,106,.18);
+  --gold:#d9b46a; --gold2:#f3dca4; --gold3:#a9823c; --sand:#efe6d6; --mute:#a59b8b;
+  --wa:#25d366; --r:18px; --ease:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:'Manrope',system-ui,sans-serif;background:var(--ink);color:var(--sand);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1380px;margin:0 auto;padding:0 clamp(14px,3vw,36px)}
+
+/* ---------- Grain + pattern ---------- */
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+main,header,footer,section{position:relative;z-index:1}
+
+/* ---------- Top bar ---------- */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:50;transition:background .4s,backdrop-filter .4s,border-color .4s;border-bottom:1px solid transparent}
+.topbar.solid{background:rgba(12,10,8,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:var(--line)}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:68px;gap:14px}
+.logo{font-family:'Cinzel',serif;font-weight:700;letter-spacing:.18em;font-size:1.05rem;color:var(--gold2);display:flex;align-items:center;gap:10px;white-space:nowrap}
+.logo svg{width:26px;height:26px}
+.nav{display:flex;gap:8px;align-items:center}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:9px 15px;border-radius:999px;border:1px solid var(--line);font-size:.82rem;font-weight:600;letter-spacing:.02em;transition:all .3s var(--ease);white-space:nowrap}
+.pill:hover{border-color:var(--gold);color:var(--gold2);transform:translateY(-1px)}
+.pill svg{width:16px;height:16px;flex-shrink:0}
+.pill.gold{background:linear-gradient(135deg,var(--gold2),var(--gold) 50%,var(--gold3));color:#1a140a;border:0}
+.pill.gold:hover{color:#1a140a;filter:brightness(1.08)}
+@media(max-width:700px){.nav .hide-m{display:none}.logo span{display:none}}
+
+/* ---------- Hero ---------- */
+.hero{min-height:100svh;display:grid;align-items:center;padding:110px 0 60px;overflow:hidden}
+.hero::after{content:"";position:absolute;inset:auto 0 0 0;height:180px;background:linear-gradient(transparent,var(--ink));pointer-events:none}
+.sun{position:absolute;width:min(90vw,900px);aspect-ratio:1;border-radius:50%;right:-15%;top:50%;transform:translateY(-50%);
+  background:radial-gradient(circle,rgba(217,180,106,.28),rgba(217,180,106,.06) 45%,transparent 70%);filter:blur(10px);animation:breathe 8s ease-in-out infinite}
+.rays{position:absolute;width:min(130vw,1300px);aspect-ratio:1;right:-35%;top:50%;transform:translateY(-50%);opacity:.13;
+  background:repeating-conic-gradient(from 0deg,var(--gold) 0deg .6deg,transparent .6deg 7.5deg);
+  -webkit-mask:radial-gradient(circle,#000 10%,transparent 62%);mask:radial-gradient(circle,#000 10%,transparent 62%);animation:spin 160s linear infinite}
+@keyframes spin{to{transform:translateY(-50%) rotate(360deg)}}
+@keyframes breathe{50%{opacity:.7;transform:translateY(-50%) scale(1.06)}}
+.hero-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(20px,4vw,60px);align-items:center;position:relative;z-index:2}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:.72rem;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);font-weight:700}
+.eyebrow::before{content:"";width:34px;height:1px;background:var(--gold)}
+h1{font-family:'Cinzel',serif;font-weight:600;font-size:clamp(2.3rem,6.2vw,5.4rem);line-height:1.02;letter-spacing:.01em;margin:18px 0 18px}
+h1 em{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500;display:block;font-size:.78em;letter-spacing:0;
+  background:linear-gradient(100deg,var(--gold3),var(--gold2) 40%,var(--gold) 60%,var(--gold3));background-size:220% 100%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 6s linear infinite}
+@keyframes shine{to{background-position:-220% 0}}
+.lead{max-width:520px;color:#cfc5b4;font-size:clamp(.98rem,1.4vw,1.1rem);line-height:1.7}
+.cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px}
+.cta .pill{padding:13px 22px;font-size:.9rem}
+.stats{display:flex;gap:clamp(18px,4vw,44px);margin-top:42px;flex-wrap:wrap}
+.stat b{display:block;font-family:'Cinzel',serif;font-size:clamp(1.5rem,3vw,2.1rem);color:var(--gold2);font-weight:600}
+.stat span{font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+
+.arches{position:relative;height:min(66vh,600px);display:flex;justify-content:center;align-items:flex-end;gap:clamp(8px,1.6vw,20px)}
+.arch{position:relative;width:31%;border-radius:999px 999px 18px 18px;overflow:hidden;border:1px solid var(--line);background:var(--ink3);
+  box-shadow:0 30px 80px rgba(0,0,0,.55),inset 0 0 0 6px rgba(12,10,8,.6);opacity:0;transform:translateY(60px);animation:rise 1.2s var(--ease) forwards}
+.arch:nth-child(1){height:78%;animation-delay:.35s}.arch:nth-child(2){height:100%;animation-delay:.15s}.arch:nth-child(3){height:70%;animation-delay:.5s}
+.arch img{width:100%;height:100%;object-fit:cover;transform:scale(1.08);animation:drift 14s ease-in-out infinite alternate}
+.arch::after{content:"";position:absolute;inset:8px;border-radius:999px 999px 12px 12px;border:1px solid rgba(243,220,164,.35);pointer-events:none}
+@keyframes rise{to{opacity:1;transform:none}}
+@keyframes drift{to{transform:scale(1.16) translateY(-3%)}}
+.reveal{opacity:0;transform:translateY(26px);animation:rise 1s var(--ease) forwards}
+.d1{animation-delay:.1s}.d2{animation-delay:.25s}.d3{animation-delay:.4s}.d4{animation-delay:.55s}.d5{animation-delay:.7s}
+@media(max-width:900px){
+  .hero{min-height:auto;padding-top:96px}
+  .hero-grid{grid-template-columns:1fr}
+  .arches{height:330px;order:-1;margin-bottom:8px}
+  .eyebrow{letter-spacing:.2em;font-size:.64rem}
+  .sun{right:-40%;top:22%}.rays{right:-60%;top:22%}
+}
+
+/* ---------- Trust strip ---------- */
+.trust{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--ink2)}
+.trust .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:1px}
+.t{display:flex;gap:14px;align-items:center;padding:22px 10px}
+.t svg{width:30px;height:30px;color:var(--gold);flex-shrink:0}
+.t b{display:block;font-size:.9rem;color:var(--sand)}
+.t span{font-size:.78rem;color:var(--mute)}
+.t a{color:var(--gold2);text-decoration:underline;text-underline-offset:3px}
+@media(max-width:900px){.trust .wrap{grid-template-columns:1fr 1fr}.t{padding:16px 4px}}
+@media(max-width:460px){.t svg{width:24px;height:24px}.t b{font-size:.8rem}.t span{font-size:.7rem}}
+
+/* ---------- Collection controls ---------- */
+.collection{padding:clamp(50px,8vw,100px) 0 120px}
+.sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:26px}
+h2{font-family:'Cinzel',serif;font-weight:600;font-size:clamp(1.7rem,3.6vw,2.8rem);line-height:1.1}
+h2 em{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold);font-weight:500}
+.count{color:var(--mute);font-size:.88rem}
+.toolbar{position:sticky;top:68px;z-index:30;padding:12px 0;margin-bottom:22px;background:linear-gradient(var(--ink) 75%,transparent)}
+.search-row{display:flex;gap:10px}
+.search{flex:1;position:relative}
+.search svg{position:absolute;left:16px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--mute)}
+.search input,.sort{width:100%;height:48px;border-radius:999px;border:1px solid var(--line);background:var(--ink2);color:var(--sand);padding:0 18px 0 44px;font:inherit;font-size:.92rem;outline:none;transition:border-color .3s}
+.search input:focus,.sort:focus{border-color:var(--gold)}
+.search input::placeholder{color:#7d7466}
+.sort{width:auto;padding:0 36px 0 18px;appearance:none;-webkit-appearance:none;cursor:pointer;
+  background:var(--ink2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%23d9b46a' stroke-width='1.6'%3E%3Cpath d='M1 1l5 5 5-5'/%3E%3C/svg%3E") no-repeat right 15px center}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:12px 0 2px;scrollbar-width:none;-ms-overflow-style:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex-shrink:0;padding:8px 15px;border-radius:999px;border:1px solid var(--line);font-size:.8rem;font-weight:600;color:#cfc5b4;transition:all .3s var(--ease)}
+.chip:hover{border-color:var(--gold);color:var(--gold2)}
+.chip.on{background:var(--gold);border-color:var(--gold);color:#1a140a}
+.chip small{opacity:.6;margin-left:4px;font-weight:500}
+@media(max-width:560px){.sort{max-width:118px;font-size:.8rem;padding:0 30px 0 14px}}
+
+/* ---------- Grid & cards ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:clamp(12px,2vw,26px)}
+@media(max-width:620px){.grid{grid-template-columns:1fr 1fr}}
+.card{position:relative;display:flex;flex-direction:column;border-radius:var(--r);background:linear-gradient(180deg,var(--ink3),var(--ink2));border:1px solid rgba(255,255,255,.05);
+  overflow:hidden;opacity:0;transform:translateY(34px) scale(.98);transition:opacity .8s var(--ease),transform .8s var(--ease),border-color .4s,box-shadow .4s}
+.card.in{opacity:1;transform:none}
+.card:hover{border-color:var(--line);box-shadow:0 24px 60px rgba(0,0,0,.5),0 0 0 1px rgba(217,180,106,.12)}
+.frame{position:relative;aspect-ratio:4/5;overflow:hidden;cursor:zoom-in;background:#0f0d0b;margin:10px 10px 0;border-radius:999px 999px 12px 12px}
+.frame::after{content:"";position:absolute;inset:6px;border-radius:999px 999px 8px 8px;border:1px solid rgba(243,220,164,.0);transition:border-color .5s;pointer-events:none}
+.card:hover .frame::after{border-color:rgba(243,220,164,.4)}
+.frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease),opacity .6s;opacity:0}
+.frame img.ok{opacity:1}
+.frame img.alt{opacity:0}
+@media(hover:hover){.card:hover .frame img.main{transform:scale(1.07)}.card:hover .frame img.alt.ok{opacity:1}}
+.frame .shim{position:absolute;inset:0;background:linear-gradient(110deg,#14110e 30%,#221d17 50%,#14110e 70%);background-size:200% 100%;animation:sh 1.4s linear infinite}
+@keyframes sh{to{background-position:-200% 0}}
+.code{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:2;padding:5px 11px;border-radius:999px;font-size:.68rem;font-weight:700;letter-spacing:.14em;
+  background:rgba(12,10,8,.78);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);color:var(--gold2);border:1px solid rgba(217,180,106,.35);white-space:nowrap}
+.views{position:absolute;right:12px;top:42%;z-index:2;font-size:.66rem;padding:4px 8px;border-radius:999px;background:rgba(12,10,8,.65);color:#d8cfbf;display:flex;gap:4px;align-items:center;opacity:0;transition:opacity .4s}
+.card:hover .views{opacity:1}
+.body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:5px;flex:1}
+.cat{font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:700}
+.title{font-family:'Cormorant Garamond',serif;font-size:1.32rem;line-height:1.15;font-weight:600;color:#f4ecdc}
+.size{font-size:.78rem;color:var(--mute);display:flex;gap:6px;align-items:center}
+.size svg{width:14px;height:14px;flex-shrink:0;color:var(--gold3)}
+.foot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:auto;padding-top:12px}
+.price{font-family:'Cinzel',serif;font-size:1.12rem;color:var(--gold2);font-weight:600}
+.price.ask{font-family:'Manrope';font-size:.76rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);font-weight:700}
+.add{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line);transition:all .35s var(--ease);flex-shrink:0}
+.add svg{width:18px;height:18px;transition:transform .35s var(--ease)}
+.add:hover{background:var(--gold);color:#1a140a;border-color:var(--gold)}
+.add.on{background:var(--gold);color:#1a140a;border-color:var(--gold)}
+.add.on svg{transform:rotate(45deg)}
+@media(max-width:620px){
+  .frame{margin:6px 6px 0}.body{padding:10px 10px 12px}.title{font-size:1.05rem}
+  .cat{font-size:.58rem;letter-spacing:.14em}.size{font-size:.68rem}.add{width:36px;height:36px}.price{font-size:.95rem}.price.ask{font-size:.62rem}
+  .code{font-size:.58rem;padding:4px 8px;bottom:8px}
+}
+.empty{grid-column:1/-1;text-align:center;padding:70px 20px;color:var(--mute)}
+.empty b{display:block;font-family:'Cinzel',serif;color:var(--sand);font-size:1.3rem;margin-bottom:8px}
+.more{display:flex;justify-content:center;margin-top:40px}
+
+/* ---------- Marketplaces ---------- */
+.markets{padding:0 0 110px}
+.mk{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.mcard{position:relative;overflow:hidden;border-radius:24px;padding:clamp(24px,4vw,44px);border:1px solid var(--line);background:linear-gradient(140deg,var(--ink3),var(--ink2));transition:transform .5s var(--ease),border-color .4s}
+.mcard:hover{transform:translateY(-4px);border-color:var(--gold)}
+.mcard::before{content:"";position:absolute;width:260px;height:260px;border-radius:50%;right:-80px;top:-80px;background:radial-gradient(circle,var(--glow),transparent 70%);opacity:.35}
+.mcard .brand{font-weight:800;font-size:2rem;letter-spacing:-.02em;margin-bottom:10px}
+.mcard p{color:#cfc5b4;max-width:380px;line-height:1.6;font-size:.95rem;margin-bottom:22px}
+.etsy{--glow:#f1641e}.etsy .brand{color:#f1641e;font-family:Georgia,serif}
+.ebay{--glow:#0064d2}.ebay .brand span:nth-child(1){color:#e53238}.ebay .brand span:nth-child(2){color:#0064d2}.ebay .brand span:nth-child(3){color:#f5af02}.ebay .brand span:nth-child(4){color:#86b817}
+@media(max-width:760px){.mk{grid-template-columns:1fr}}
+
+footer{border-top:1px solid var(--line);padding:40px 0 120px;color:var(--mute);font-size:.84rem;line-height:1.8}
+footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
+footer a{color:var(--gold2)}
+footer .logo{margin-bottom:6px}
+
+/* ---------- Order bar ---------- */
+.orderbar{position:fixed;left:50%;bottom:max(16px,env(safe-area-inset-bottom));z-index:60;transform:translate(-50%,160%);width:min(640px,calc(100% - 24px));
+  display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 10px 10px 18px;border-radius:999px;
+  background:rgba(21,18,14,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--line);box-shadow:0 20px 60px rgba(0,0,0,.6);transition:transform .6s var(--ease)}
+.orderbar.show{transform:translate(-50%,0)}
+.ob-info{display:flex;align-items:center;gap:12px;min-width:0}
+.ob-thumbs{display:flex}
+.ob-thumbs img{width:34px;height:34px;border-radius:50%;object-fit:cover;border:2px solid var(--ink2);margin-left:-10px}
+.ob-thumbs img:first-child{margin-left:0}
+.ob-text{font-size:.82rem;line-height:1.3;min-width:0}
+.ob-text b{display:block;color:var(--gold2)}
+.ob-text span{color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.ob-act{display:flex;gap:6px;flex-shrink:0}
+.btn-wa{display:inline-flex;align-items:center;gap:8px;background:var(--wa);color:#05210f;font-weight:800;font-size:.82rem;padding:12px 18px;border-radius:999px;transition:filter .3s,transform .3s}
+.btn-wa:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.btn-wa svg{width:18px;height:18px}
+.btn-x{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line);color:var(--mute)}
+@media(max-width:460px){.ob-thumbs{display:none}.btn-wa span{display:none}.btn-wa{padding:12px 14px}}
+.fab{position:fixed;right:18px;bottom:max(18px,env(safe-area-inset-bottom));z-index:55;width:58px;height:58px;border-radius:50%;background:var(--wa);display:grid;place-items:center;box-shadow:0 12px 30px rgba(37,211,102,.35);transition:transform .4s var(--ease),opacity .4s}
+.fab svg{width:30px;height:30px;color:#fff}
+.fab::before{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--wa);animation:ping 2.4s ease-out infinite}
+@keyframes ping{from{transform:scale(1);opacity:.7}to{transform:scale(1.6);opacity:0}}
+body.has-order .fab{transform:scale(0);opacity:0}
+
+/* ---------- Modal ---------- */
+.modal{position:fixed;inset:0;z-index:80;display:grid;place-items:center;padding:20px;visibility:hidden;opacity:0;transition:opacity .45s var(--ease),visibility .45s}
+.modal.open{visibility:visible;opacity:1}
+.backdrop{position:absolute;inset:0;background:rgba(6,5,4,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.sheet{position:relative;width:min(1120px,100%);height:min(780px,calc(100svh - 40px));display:grid;grid-template-columns:1.25fr 1fr;border-radius:26px;overflow:hidden;
+  background:var(--ink2);border:1px solid var(--line);box-shadow:0 40px 120px rgba(0,0,0,.7);transform:translateY(30px) scale(.97);transition:transform .55s var(--ease)}
+.modal.open .sheet{transform:none}
+.gal{position:relative;background:#080706;display:flex;flex-direction:column;min-height:0}
+.stage{position:relative;flex:1;min-height:0;overflow:hidden;touch-action:pan-y}
+.track{display:flex;height:100%;transition:transform .5s var(--ease)}
+.slide{flex:0 0 100%;height:100%;display:grid;place-items:center;padding:14px}
+.slide img{max-width:100%;max-height:100%;object-fit:contain;border-radius:12px}
+.nav-b{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:rgba(12,10,8,.7);border:1px solid var(--line);z-index:3;transition:background .3s}
+.nav-b:hover{background:var(--gold);color:#1a140a}
+.nav-b.p{left:12px}.nav-b.n{right:12px}
+.nav-b svg{width:18px;height:18px}
+.counter{position:absolute;left:14px;top:14px;z-index:3;font-size:.72rem;letter-spacing:.12em;padding:5px 10px;border-radius:999px;background:rgba(12,10,8,.7);color:var(--gold2)}
+.strip{display:flex;gap:8px;padding:12px;overflow-x:auto;scrollbar-width:thin;scrollbar-color:var(--gold3) transparent}
+.strip img{width:58px;height:58px;border-radius:10px;object-fit:cover;opacity:.45;cursor:pointer;flex-shrink:0;border:2px solid transparent;transition:all .3s}
+.strip img.on{opacity:1;border-color:var(--gold)}
+.info{padding:clamp(22px,3vw,40px);overflow-y:auto;display:flex;flex-direction:column;gap:14px}
+.close{position:absolute;right:14px;top:14px;z-index:5;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:rgba(12,10,8,.75);border:1px solid var(--line);transition:transform .4s var(--ease)}
+.close:hover{transform:rotate(90deg);border-color:var(--gold)}
+.close svg{width:18px;height:18px}
+.info h3{font-family:'Cormorant Garamond',serif;font-size:clamp(1.7rem,3vw,2.4rem);line-height:1.08;font-weight:600;color:#f6eedf}
+.meta{display:grid;gap:10px;padding:16px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.meta div{display:flex;justify-content:space-between;gap:14px;font-size:.86rem}
+.meta dt{color:var(--mute)}.meta dd{color:var(--sand);text-align:right;font-weight:600}
+.big-price{font-family:'Cinzel',serif;font-size:1.9rem;color:var(--gold2)}
+.big-price.ask{font-family:'Manrope';font-size:1rem;color:var(--gold);letter-spacing:.06em;text-transform:uppercase;font-weight:700}
+.note{font-size:.8rem;color:var(--mute);line-height:1.6}
+.acts{display:grid;gap:10px;margin-top:4px}
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;padding:14px 18px;border-radius:14px;font-weight:700;font-size:.9rem;transition:all .3s var(--ease);border:1px solid var(--line)}
+.btn svg{width:18px;height:18px}
+.btn.primary{background:linear-gradient(135deg,var(--gold2),var(--gold) 55%,var(--gold3));color:#1a140a;border:0}
+.btn.primary:hover{filter:brightness(1.07);transform:translateY(-1px)}
+.btn.wa{background:var(--wa);color:#05210f;border:0}
+.btn:hover{border-color:var(--gold)}
+.alsob{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn.et{color:#ff8a4c}.btn.eb{color:#5aa2ff}
+@media(max-width:860px){
+  .modal{padding:0;place-items:end center}
+  .sheet{grid-template-columns:1fr;border-radius:24px 24px 0 0;height:auto;max-height:94svh;overflow-y:auto;transform:translateY(100%)}
+  .gal{min-height:auto}.stage{height:min(62vh,520px);flex:none}
+  .info{overflow:visible;padding-bottom:calc(28px + env(safe-area-inset-bottom))}
+  .nav-b{display:none}
+}
+.toast{position:fixed;left:50%;top:20px;z-index:90;transform:translate(-50%,-30px);opacity:0;padding:10px 18px;border-radius:999px;background:var(--gold);color:#1a140a;font-weight:700;font-size:.82rem;transition:all .5s var(--ease);pointer-events:none}
+.toast.show{transform:translate(-50%,0);opacity:1}
+.err{max-width:560px;margin:30px auto;text-align:center;padding:24px;border:1px solid var(--line);border-radius:18px;color:#cfc5b4;line-height:1.7}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.card,.reveal,.arch{opacity:1!important;transform:none!important}}
+</style>
 </head>
 <body>
 
-<header>
-  <div class="header-inner">
-    <div class="brand">AHM BAZAAR<span>Egyptian Handcrafted Collection</span></div>
-    <div class="controls">
-      <input type="text" id="searchInput" placeholder="Search by Code (e.g. UK-042) or Name...">
-      <select id="materialFilter"><option value="">All Materials</option></select>
-      <select id="sortSelect">
-        <option value="code">Sort: Code</option>
-        <option value="price-asc">Price: Low → High</option>
-        <option value="price-desc">Price: High → Low</option>
-      </select>
-    </div>
+<header class="topbar" id="topbar">
+  <div class="wrap">
+    <a href="#top" class="logo">
+      <svg viewBox="0 0 64 64" fill="none"><path d="M32 6a10 10 0 0 1 10 10c0 6-5 9-7 12h13v7H36v23h-8V35H16v-7h13c-2-3-7-6-7-12A10 10 0 0 1 32 6zm0 6.5a3.6 3.6 0 0 0-3.6 3.6c0 3.4 3.6 7 3.6 7s3.6-3.6 3.6-7a3.6 3.6 0 0 0-3.6-3.6z" fill="#d9b46a"/></svg>
+      AHM BAZAAR
+    </a>
+    <nav class="nav">
+      <a class="pill hide-m" href="#collection">Collection</a>
+      <a class="pill hide-m" href="https://www.etsy.com/shop/EgyptologybazaarUK" target="_blank" rel="noopener">Etsy</a>
+      <a class="pill hide-m" href="https://www.ebay.co.uk/str/theegyptologybazaar" target="_blank" rel="noopener">eBay</a>
+      <a class="pill gold" href="https://wa.me/447717583790" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.3 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.4z"/></svg>
+        WhatsApp
+      </a>
+    </nav>
   </div>
 </header>
 
-<div class="container">
-  <div class="stats-bar">
-    <span id="itemCounter">Loading products...</span>
-    <span>Tap any image to zoom &amp; view all angles</span>
-  </div>
-  <div id="statusMsg" class="loader">Loading AHM Bazaar Catalog...</div>
-  <div id="grid" class="grid"></div>
-</div>
+<main id="top">
+  <section class="hero">
+    <div class="sun"></div><div class="rays"></div>
+    <div class="wrap hero-grid">
+      <div>
+        <div class="eyebrow reveal d1">UK Catalogue · Handcrafted in Egypt</div>
+        <h1 class="reveal d2">The Egyptian<em>Collection of Gods &amp; Kings</em></h1>
+        <p class="lead reveal d3">Hand-carved statues, ushabti, sistrums and sacred amulets, made by Egyptian sculptors and ready to ship from our UK warehouse. Choose your pieces and send your order on WhatsApp in one tap.</p>
+        <div class="cta reveal d4">
+          <a class="pill gold" href="#collection">Explore the collection
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg></a>
+          <a class="pill" href="https://www.etsy.com/shop/EgyptologybazaarUK" target="_blank" rel="noopener">Shop on Etsy</a>
+          <a class="pill" href="https://www.ebay.co.uk/str/theegyptologybazaar" target="_blank" rel="noopener">Shop on eBay</a>
+        </div>
+        <div class="stats reveal d5">
+          <div class="stat"><b id="statCount">149</b><span>Unique pieces</span></div>
+          <div class="stat"><b>UK</b><span>Stock &amp; dispatch</span></div>
+          <div class="stat"><b>360°</b><span>Photos of every piece</span></div>
+        </div>
+      </div>
+      <div class="arches" aria-hidden="true">
+        <div class="arch"><img src="https://lh3.googleusercontent.com/d/1CBnKAJFSSF_jFjfq0GXnp77FdTlU9ee-=w600" alt=""></div>
+        <div class="arch"><img src="https://lh3.googleusercontent.com/d/1RE12-hkm19_VIQdjQdgwOvwFoCbgaWxT=w700" alt=""></div>
+        <div class="arch"><img src="https://lh3.googleusercontent.com/d/1xQsZS9gMNWrqMNLQn2_DJ_ACWRLP_yH5=w600" alt=""></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="trust">
+    <div class="wrap">
+      <div class="t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7l9-4 9 4v10l-9 4-9-4z"/><path d="M3 7l9 4 9-4M12 11v10"/></svg><div><b>UK warehouse</b><span>Fast dispatch within the UK</span></div></div>
+      <div class="t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3l7 3v6c0 4.5-3 7.8-7 9-4-1.2-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg><div><b>Buyer protection</b><span>Also on <a href="https://www.etsy.com/shop/EgyptologybazaarUK" target="_blank" rel="noopener">Etsy</a> &amp; <a href="https://www.ebay.co.uk/str/theegyptologybazaar" target="_blank" rel="noopener">eBay</a></span></div></div>
+      <div class="t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 11V6a2 2 0 0 1 4 0v5M11 10V4a2 2 0 0 1 4 0v6M15 10V6a2 2 0 0 1 4 0v8a7 7 0 0 1-7 7h-1a7 7 0 0 1-6-3.5L3 14a2 2 0 0 1 3.4-2L7 13"/></svg><div><b>Real size shown</b><span>Every piece photographed in hand</span></div></div>
+      <div class="t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12a9 9 0 0 1-13.5 7.8L3 21l1.2-4.5A9 9 0 1 1 21 12z"/></svg><div><b>Order on WhatsApp</b><span>Personal reply from our team</span></div></div>
+    </div>
+  </section>
+
+  <section class="collection" id="collection">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>The <em>Collection</em></h2>
+        <div class="count" id="count">Loading the collection…</div>
+      </div>
+      <div class="toolbar">
+        <div class="search-row">
+          <label class="search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+            <input id="q" type="search" placeholder="Search Anubis, Bastet, UK-045…" autocomplete="off">
+          </label>
+          <select id="sort" class="sort" aria-label="Sort">
+            <option value="code">By code</option>
+            <option value="az">Name A–Z</option>
+            <option value="lo">Price ↑</option>
+            <option value="hi">Price ↓</option>
+          </select>
+        </div>
+        <div class="chips" id="chips"></div>
+      </div>
+      <div class="grid" id="grid"></div>
+      <div class="more"><button class="pill" id="moreBtn" hidden>Show more pieces</button></div>
+    </div>
+  </section>
+
+  <section class="markets">
+    <div class="wrap">
+      <div class="sec-head"><h2>Prefer to buy on <em>a marketplace?</em></h2></div>
+      <div class="mk">
+        <a class="mcard etsy" href="https://www.etsy.com/shop/EgyptologybazaarUK" target="_blank" rel="noopener">
+          <div class="brand">Etsy</div>
+          <p>Find our pieces in the EgyptologybazaarUK shop, with Etsy's secure checkout and purchase protection.</p>
+          <span class="pill">Visit our Etsy shop →</span>
+        </a>
+        <a class="mcard ebay" href="https://www.ebay.co.uk/str/theegyptologybazaar" target="_blank" rel="noopener">
+          <div class="brand"><span>e</span><span>b</span><span>a</span><span>y</span></div>
+          <p>Shop The Egyptology Bazaar store on eBay UK, covered by the eBay Money Back Guarantee.</p>
+          <span class="pill">Visit our eBay store →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
 
 <footer>
-  AHM BAZAAR LTD · Registered in England &amp; Wales (No. 17495923)<br>
-  <a href="mailto:o.arthubazaar@gmail.com">o.arthubazaar@gmail.com</a> ·
-  <a href="https://wa.me/447717583790" target="_blank" rel="noopener">WhatsApp +44 7717 583790</a>
+  <div class="wrap">
+    <div>
+      <div class="logo">AHM BAZAAR</div>
+      AHM BAZAAR LTD · Registered in England &amp; Wales · Company No. 17495923
+    </div>
+    <div>
+      <a href="https://wa.me/447717583790" target="_blank" rel="noopener">WhatsApp +44 7717 583790</a><br>
+      <a href="mailto:o.arthubazaar@gmail.com">o.arthubazaar@gmail.com</a><br>
+      <a href="https://www.etsy.com/shop/EgyptologybazaarUK" target="_blank" rel="noopener">Etsy</a> · <a href="https://www.ebay.co.uk/str/theegyptologybazaar" target="_blank" rel="noopener">eBay</a>
+    </div>
+  </div>
 </footer>
 
-<a class="wa-float" href="https://wa.me/447717583790" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
-  <svg width="30" height="30" viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.3 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.4z"/></svg>
+<a class="fab" href="https://wa.me/447717583790" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.3 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.4z"/></svg>
 </a>
 
-<div id="cartBar" class="cart-bar">
-  <div>
-    <strong id="cartCount">0 Items</strong>
-    <div style="font-size:0.8rem; color:#d6d3d1;" id="cartTotal"></div>
-  </div>
-  <div style="display:flex; gap:8px;">
-    <button class="btn-clear" id="clearBtn">Clear</button>
-    <button class="btn-wa" id="waBtn">ORDER VIA WHATSAPP</button>
+<div class="orderbar" id="orderbar">
+  <div class="ob-info"><div class="ob-thumbs" id="obThumbs"></div><div class="ob-text"><b id="obCount"></b><span id="obTotal"></span></div></div>
+  <div class="ob-act">
+    <button class="btn-x" id="obClear" aria-label="Clear order"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg></button>
+    <button class="btn-wa" id="obSend"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.3 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.4z"/></svg><span>Send order</span></button>
   </div>
 </div>
 
-<div id="modal" class="modal">
-  <div class="modal-box">
-    <div class="modal-img">
-      <img id="modalMain" src="" alt="">
-      <div id="modalThumbs" class="thumbs" style="margin-top:10px;"></div>
+<div class="modal" id="modal" aria-modal="true" role="dialog">
+  <div class="backdrop" data-close></div>
+  <div class="sheet">
+    <button class="close" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <div class="gal">
+      <div class="stage" id="stage">
+        <div class="counter" id="mCounter"></div>
+        <div class="track" id="track"></div>
+        <button class="nav-b p" id="prev" aria-label="Previous photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <button class="nav-b n" id="next" aria-label="Next photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></button>
+      </div>
+      <div class="strip" id="strip"></div>
     </div>
-    <div class="modal-info">
-      <button class="close-btn" id="closeBtn" aria-label="Close">&times;</button>
-      <div id="modalCode" style="color:var(--gold); font-weight:700; font-size:0.85rem; margin-bottom:6px;"></div>
-      <h2 id="modalTitle" style="font-size:1.3rem; margin-bottom:12px;"></h2>
-      <p class="meta" id="modalMat"></p>
-      <p class="meta" id="modalDim"></p>
-      <div class="price" id="modalPrice" style="font-size:1.4rem;"></div>
-      <button id="modalAddBtn" class="btn-add">ADD TO ORDER</button>
+    <div class="info">
+      <div class="cat" id="mCat"></div>
+      <h3 id="mTitle"></h3>
+      <div id="mPrice"></div>
+      <dl class="meta">
+        <div><dt>Product code</dt><dd id="mCode"></dd></div>
+        <div><dt>Size</dt><dd id="mSize"></dd></div>
+        <div id="mMatRow"><dt>Material</dt><dd id="mMat"></dd></div>
+        <div><dt>Ships from</dt><dd>United Kingdom</dd></div>
+      </dl>
+      <p class="note">Size is approximate. Swipe through the photos to see the piece held in hand for real scale.</p>
+      <div class="acts">
+        <button class="btn primary" id="mAdd"></button>
+        <a class="btn wa" id="mAsk" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.3 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.4z"/></svg>Ask about this piece</a>
+        <div class="alsob">
+          <a class="btn et" href="https://www.etsy.com/shop/EgyptologybazaarUK" target="_blank" rel="noopener">Buy on Etsy</a>
+          <a class="btn eb" href="https://www.ebay.co.uk/str/theegyptologybazaar" target="_blank" rel="noopener">Buy on eBay</a>
+        </div>
+      </div>
     </div>
   </div>
 </div>
+
+<div class="toast" id="toast"></div>
 
 <script>
-  // ===== SETTINGS (edit here only) =====
-  const SHEET_ID = "1KzALnczn-Gd-uTxwnlZrWjnbpWop3ADOzYLns3Z5Ob0";
-  const SHEET_NAME = "Sheet1";
-  const WHATSAPP_NUM = "447717583790";
-  // =====================================
+/* ======== SETTINGS ======== */
+const SHEET_ID  = "1KzALnczn-Gd-uTxwnlZrWjnbpWop3ADOzYLns3Z5Ob0";
+const SHEET_TAB = "Sheet1";
+const WHATSAPP    = "447717583790";
+/* ========================== */
+const INFO = {"UK-001":{"t":"Ushabti Funerary Figure","d":"Approx. 15 cm tall · shown in hand for scale","c":"Ushabti Figures","m":"1xMFSH8yk5RaAAw0x5fNshzfv7EDgLU21"},"UK-002":{"t":"Osiris Standing Statue – Blue Grey","d":"Approx. 20 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"1JEzLh2haN0_SB27LLDdJvBEVddhW9s4k"},"UK-003":{"t":"Sekhmet Standing Statue – Black","d":"Approx. 20 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"1v9mIajX4nrOSiBY-ibP8Q5KyFZ8maIQm"},"UK-004":{"t":"Striding Pharaoh with Nemes Headdress","d":"Approx. 18 cm tall · shown in hand for scale","c":"Pharaohs & Royals","m":"1_FaOGSnUS2M8weTlGc48zrT81EBpv0z4"},"UK-005":{"t":"Bastet Cat-Headed Goddess Statue","d":"Approx. 18 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"1xFrMCOpOw9A7vYHS3fvN5dXcdQ2L8H_G"},"UK-006":{"t":"Thoth Ibis-Headed Statue","d":"Approx. 18 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"1zXFkYSVGPvnqSJ_Zle6_4y3Kfq5qDWeb"},"UK-007":{"t":"Ra-Horakhty with Sun Disk Statue","d":"Approx. 17 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"1tFbwOGlOv9D1Zw90tqGZdrVJTv88ZeB2"},"UK-008":{"t":"Egyptian Nobleman Standing Statue","d":"Approx. 16 cm tall · shown in hand for scale","c":"Pharaohs & Royals","m":"1xFrSW6X3em1WGergHpw8dqMQWSi7XXXy"},"UK-009":{"t":"Egyptian Priestess Standing Statue","d":"Approx. 16 cm tall · shown in hand for scale","c":"Pharaohs & Royals","m":"1er4ImeGpulhayLl9eUxikVwT0_jsvugG"},"UK-010":{"t":"Osiris with Crook & Flail – Black","d":"Approx. 22 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"1eOs5IJsu-qui22rCoZvcnNItKQBcd5iS"},"UK-011":{"t":"Ptah Standing Statue – Black","d":"Approx. 22 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"167nyS9YqRZdnRGJrPvCqH0OwarN8t2uA"},"UK-012":{"t":"Blue Pharaoh Standing Statue","d":"Approx. 18 cm tall · shown in hand for scale","c":"Pharaohs & Royals","m":"1xkowcb_j7Sl7gQayB2lfDj3G_b0cbMRa"},"UK-013":{"t":"Thoth Baboon Statue","d":"Approx. 12 cm tall · shown in hand for scale","c":"Sacred Animals","m":"1Pk2JHc4dgZP2sLUVn1pJ_oCpwdXYIhhR"},"UK-014":{"t":"Seated Goddess on Throne","d":"Approx. 15 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"1EXHOlzNHVVQB1TpzDn583SZyv9d2Wh3p"},"UK-015":{"t":"Sekhmet with Back Pillar Statue","d":"Approx. 18 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"1WAcWtp-I0FJGL14tkTGMZ4I9MitCpnLN"},"UK-016":{"t":"Taweret Hippo Goddess Statue","d":"Approx. 12 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"1AaK9ARLuTyPRJwrL4Mzfm4VQXn7wact4"},"UK-017":{"t":"Isis Standing Statue","d":"Approx. 16 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"1n7Re0bD0PDHdeIWdkZLdyXAEDUWfJMqc"},"UK-018":{"t":"Pharaoh with Crook & Flail","d":"Approx. 20 cm tall · shown in hand for scale","c":"Pharaohs & Royals","m":"1S1An4ttwBY-uvyOcMVkuPjlNjn3Jc_aY"},"UK-019":{"t":"Pharaoh Sarcophagus Bust","d":"Approx. 15 cm tall · shown in hand for scale","c":"Busts & Heads","m":"1Rvea9XXrZHoOeEAkgFOoPnqQjjx6tDkl"},"UK-020":{"t":"Large Ushabti Funerary Figure","d":"Approx. 15 cm tall · shown in hand for scale","c":"Ushabti Figures","m":"1WLKYH73GNvzWF9dHLUzzg5jC050ewkvk"},"UK-021":{"t":"Black Pharaoh Standing Statue","d":"Approx. 20 cm tall · shown in hand for scale","c":"Pharaohs & Royals","m":"1b_orZhP_AHxrIXeVlmlWkHSL6MFf_kBt"},"UK-022":{"t":"Amun-Ra with Double Plumes","d":"Approx. 22 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"1_Uyzpol9vZz0f9A48nqkGN__tZBKiCXS"},"UK-023":{"t":"Queen Nefertiti Standing Statue – Black","d":"Approx. 20 cm tall · shown in hand for scale","c":"Pharaohs & Royals","m":"1rUMbBYBSqisTyJEufP7yJAR-b5yCoxeE"},"UK-024":{"t":"Hathor Standing Statue","d":"Approx. 20 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"1bT3PElQh1jlZHei8VLkG_kVmHOBMOSLJ"},"UK-025":{"t":"Isis Statue – Black","d":"Approx. 20 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"1ZiMqLgG4UlxfxvRoVNXptqmJTigWCzkt"},"UK-026":{"t":"Bastet Sacred Cat – Gold","d":"Approx. 15 cm tall · shown in hand for scale","c":"Sacred Animals","m":"1CBnKAJFSSF_jFjfq0GXnp77FdTlU9ee-"},"UK-027":{"t":"Thoth Ibis-Headed Statue – Painted","d":"Approx. 20 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"1bYIMZoYtxzaaw-ioXP0H4fbj001EBH7I"},"UK-028":{"t":"Kneeling Pharaoh Offering Statue","d":"Approx. 15 cm tall · shown in hand for scale","c":"Pharaohs & Royals","m":"11tadpslZ7zmTFlSKeglcuXHo8xfl0fsf"},"UK-029":{"t":"Osiris Standing Statue – Green","d":"Approx. 22 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"16VEdoL0RUYwxd9ondqGXhlzbweg3_WLm"},"UK-030":{"t":"Anubis Standing Statue","d":"Approx. 22 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"1IijXBLn9996i7lUGTwgTxv7DyeY9eRlP"},"UK-031":{"t":"Osiris with Atef Crown – Green","d":"Approx. 20 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"1H1KIEeZg_WJ3zPPoqUEukdxIbjPj5X5o"},"UK-032":{"t":"Isis-Hathor with Horns & Sun Disk – Green","d":"Approx. 20 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"1Sg9g4f3umvZSTzk5JnNdvpb16Twr6gug"},"UK-033":{"t":"Ptah Standing Statue – Grey","d":"Approx. 20 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"1fjAm_s-bDbaSaR6ajK7TfSWp3ZQjpRNr"},"UK-034":{"t":"Anubis Jackal Statue – Gold","d":"Approx. 18 cm tall · shown in hand for scale","c":"Sacred Animals","m":"1xQsZS9gMNWrqMNLQn2_DJ_ACWRLP_yH5"},"UK-035":{"t":"Ushabti Funerary Figure – Painted","d":"Approx. 15 cm tall · shown in hand for scale","c":"Ushabti Figures","m":"1GuX4rjs8xYiNT6jQcjEsS_aE9rjJwir0"},"UK-036":{"t":"Osiris with Atef Crown – Painted","d":"Approx. 18 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"1tyc_-XFJQybMX87zU0qVcLnAaWHVXxx2"},"UK-037":{"t":"Gilded Ushabti Figure","d":"Approx. 16 cm tall · shown in hand for scale","c":"Ushabti Figures","m":"1GTQO0Ay8Xa85Ny2YE-tvOzcTl40OyIp_"},"UK-038":{"t":"Hathor Head Plaque","d":"Approx. 12 cm tall · shown in hand for scale","c":"Busts & Heads","m":"17NtD97MFuRDsV8EqlaVRTA0Wafe5peX3"},"UK-039":{"t":"Pharaoh with White Crown Statue","d":"Approx. 20 cm tall · shown in hand for scale","c":"Pharaohs & Royals","m":"1UdHkyKEQc_NawXglk709o74pwHXcOood"},"UK-040":{"t":"Pharaoh Head with Khepresh Crown","d":"Approx. 12 cm tall · shown in hand for scale","c":"Busts & Heads","m":"1IRyIUYgqbPx7uCuAamdGE6jJ_cBkv1UK"},"UK-041":{"t":"Painted Pyramid","d":"Approx. 10 cm wide · shown in hand for scale","c":"Amulets & Symbols","m":"1-9PadRbYZuY5iQJhvSNPpYHdYWuq67vi"},"UK-042":{"t":"Falcon-Headed Mummy Figure","d":"Approx. 10 cm tall · shown in hand for scale","c":"Ushabti Figures","m":"1OeMVYuwHySQe5PfMA0GgGoS-Lm0F8DKK"},"UK-043":{"t":"Horus Falcon Statue","d":"Approx. 15 cm tall · shown in hand for scale","c":"Sacred Animals","m":"1DKWlGRpQroNTaoOh5PU7n4k0_MuLUF-7"},"UK-044":{"t":"Osiris with Atef Crown","d":"Approx. 18 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"1l25RoNSdn9rUbA_Xwwj6ni9KwXX0HywT"},"UK-045":{"t":"Isis Holding the Ankh – Gold","d":"Approx. 18 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"1GfhDi_glsdbvYl1U2y74wcGld0yLlVAc"},"UK-046":{"t":"Anubis Seated on Hieroglyph Throne","d":"Approx. 15 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"1XDOm2wC18hNqR-N1Ec2FpJ4XNRXaI8Sz"},"UK-047":{"t":"Seated Pharaoh on Throne","d":"Approx. 15 cm tall · shown in hand for scale","c":"Pharaohs & Royals","m":"1EiXqDZ11ZwpNIg_wFUQN2gevsg70q-Rp"},"UK-048":{"t":"Hathor Head Plaque – Painted","d":"Approx. 12 cm tall · shown in hand for scale","c":"Busts & Heads","m":"1W0TcYyaayDIT1x14x7UBns4gPpoUAnER"},"UK-049":{"t":"Egyptian Queen Bust","d":"Approx. 12 cm tall · shown in hand for scale","c":"Busts & Heads","m":"1avlyW1Fr9uLDNkwH6crXyIG1ETFvzkkp"},"UK-050":{"t":"Sekhmet Head with Sun Disk","d":"Approx. 12 cm tall · shown in hand for scale","c":"Busts & Heads","m":"1R_hTqVDDB5CNQnuWR16kIBMprhI64ZvR"},"UK-051":{"t":"Anubis Head Bust","d":"Approx. 12 cm tall · shown in hand for scale","c":"Busts & Heads","m":"1Oike_-rr2DRzlpjgJai10D2jaqM-bSuu"},"UK-052":{"t":"Horus Falcon Statue – Painted","d":"Approx. 13 cm tall · shown in hand for scale","c":"Sacred Animals","m":"1-1x8V4wJ1WyLynRoeKclJL3AyjK9jGvG"},"UK-053":{"t":"Anubis Seated Jackal","d":"Approx. 15 cm tall · shown in hand for scale","c":"Sacred Animals","m":"1Tb5O4S7p-BbV_wjjdmbsTMYIy1qVDzIh"},"UK-054":{"t":"Osiris on Pedestal – Painted","d":"Approx. 18 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"1-4AbcLdVZW5tByMuualXexs06Bjkey_E"},"UK-055":{"t":"Isis Seated on Throne – Green","d":"Approx. 15 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"15zDkphIg4YkojjzZVJEkuGP4rM5IjDgE"},"UK-056":{"t":"Egyptian Deity Column Statue","d":"Approx. 18 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"1lUcfnBg17UR98zgL2vqF_GaLWlkk-42P"},"UK-057":{"t":"Ushabti Funerary Figure – Cream","d":"Approx. 15 cm tall · shown in hand for scale","c":"Ushabti Figures","m":"1cvNhElKgRL3Qb5twnATd1HTnZ4HhdwpP"},"UK-058":{"t":"Ushabti Funerary Figure – Grey","d":"Approx. 15 cm tall · shown in hand for scale","c":"Ushabti Figures","m":"1LVT-EYOo4qBcekng6eqo4zOu6i1oQhlP"},"UK-059":{"t":"Ushabti with Blue Headdress","d":"Approx. 16 cm tall · shown in hand for scale","c":"Ushabti Figures","m":"1n0M9UJfWqg7hnfYTPBX2Zy7zGzL1eMcI"},"UK-060":{"t":"Ushabti with Blue Headdress – Small","d":"Approx. 12 cm tall · shown in hand for scale","c":"Ushabti Figures","m":"1xJDDDQlAZzrHQcEDh8mUNjZDuAsj3jc4"},"UK-061":{"t":"Ushabti Funerary Figure – Aged","d":"Approx. 13 cm tall · shown in hand for scale","c":"Ushabti Figures","m":"1s7zT3kAvIWGghQl8ryOt0uqO9kW0lPqb"},"UK-062":{"t":"Painted Ushabti Figure","d":"Approx. 13 cm tall · shown in hand for scale","c":"Ushabti Figures","m":"1Cb9h5GPjyc7_i38Rp4kPL1Xdr4YBLMkW"},"UK-063":{"t":"Gilded-Face Ushabti Figure","d":"Approx. 12 cm tall · shown in hand for scale","c":"Ushabti Figures","m":"1zmX51uiA5CZfqLqTrEtLxyyHnr-INnWu"},"UK-064":{"t":"Ushabti Funerary Figure – Aged","d":"Approx. 13 cm tall · shown in hand for scale","c":"Ushabti Figures","m":"1GeEwMzpKzuBGaHWs7mLG2Q1XoPu5IMSy"},"UK-065":{"t":"Ushabti Funerary Figure – Aged","d":"Approx. 13 cm tall · shown in hand for scale","c":"Ushabti Figures","m":"1dSgE3ALCKP0MxHolIQTJCDVyaHMXR_u6"},"UK-066":{"t":"Red-Face Ushabti Figure","d":"Approx. 13 cm tall · shown in hand for scale","c":"Ushabti Figures","m":"18shdKT7slN0emMQxutU2hUBWiGviKWxU"},"UK-067":{"t":"Ushabti Funerary Figure – Aged","d":"Approx. 14 cm tall · shown in hand for scale","c":"Ushabti Figures","m":"1W4GmqJs8_BCEl94DmxsYg5dAYSpLTDiM"},"UK-068":{"t":"Red-Face Ushabti Figure","d":"Approx. 14 cm tall · shown in hand for scale","c":"Ushabti Figures","m":"1mSRrIgFQNx-EZxxXGo-pj9dD309L0Lwo"},"UK-069":{"t":"Egyptian Noble Head Bust","d":"Approx. 12 cm tall · shown in hand for scale","c":"Busts & Heads","m":"1VPlWGEmXR-qDa2882svk2h0zAgTl6MYw"},"UK-070":{"t":"Seated Egyptian Official Statue","d":"Approx. 12 cm tall · shown in hand for scale","c":"Pharaohs & Royals","m":"1I__GRQW6n9OxYBIqbakFfvx_R1qBmFfQ"},"UK-071":{"t":"Seated Pharaoh on Chair","d":"Approx. 15 cm tall · shown in hand for scale","c":"Pharaohs & Royals","m":"1PLP-nYSkJU5nMz-Ox_3fkbVDzP2SD5NO"},"UK-072":{"t":"Egyptian Block Statue","d":"Approx. 12 cm tall · shown in hand for scale","c":"Pharaohs & Royals","m":"13Z1zkNjzcoIGYGmaONLEG0mbMMJkX_AD"},"UK-073":{"t":"Painted Ushabti Figure","d":"Approx. 15 cm tall · shown in hand for scale","c":"Ushabti Figures","m":"1Ma9Tq6tPfleloAeiVtcARVL91axgQxJV"},"UK-074":{"t":"Gilded Ushabti Figure","d":"Approx. 15 cm tall · shown in hand for scale","c":"Ushabti Figures","m":"1tzUcQkdjwp3z80uBnSp-88n-WxfhiB6_"},"UK-075":{"t":"Small Ushabti Figure","d":"Approx. 10 cm tall · shown in hand for scale","c":"Ushabti Figures","m":"1JfSeIZkwuZJLfjy9bKx6_GHp1Vh1dPn8"},"UK-076":{"t":"Hathor Sistrum – Blue","d":"Approx. 25 cm tall · shown in hand for scale","c":"Sistrums & Sceptres","m":"13jvKykLBuLN0MMz6Tz17vizxHngiClJY"},"UK-077":{"t":"Hathor Sistrum – Wood & Brass","d":"Approx. 25 cm tall · shown in hand for scale","c":"Sistrums & Sceptres","m":"15RBti9WAvgLKlKAsw_BUzPeSIA-_dYT9"},"UK-078":{"t":"Carved Ankh – Key of Life","d":"Approx. 18 cm tall · shown in hand for scale","c":"Amulets & Symbols","m":"1sU1SlKLwj1pE64G4z0-HY2V0ETwgfKDk"},"UK-079":{"t":"Winged Ankh","d":"Approx. 18 cm tall · shown in hand for scale","c":"Amulets & Symbols","m":"1zZ5FVuzdbEbb9PEQd1C4BY67My1qfOpC"},"UK-080":{"t":"Egyptian Ceremonial Dagger","d":"Approx. 25 cm tall · shown in hand for scale","c":"Amulets & Symbols","m":"1SMcDXFxR0u1bXPbvXXP0FW7FQ7_yuRzt"},"UK-081":{"t":"Hathor Column Plaque","d":"Approx. 20 cm tall · shown in hand for scale","c":"Busts & Heads","m":"1cNSnu85ZWw_DZObv4fGWO51FKtXa6z7_"},"UK-082":{"t":"Anubis Standing Statue – Black","d":"Approx. 22 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"1A7YPF6Xj__bz7g3tb7sPsV9q41L51EYi"},"UK-083":{"t":"Horus Falcon Statue – Black","d":"Approx. 15 cm tall · shown in hand for scale","c":"Sacred Animals","m":"1jQUVvOoR0DcvAXeQoPPLrZOBopEfeN6G"},"UK-084":{"t":"Seated Pharaoh on Block Throne","d":"Approx. 15 cm tall · shown in hand for scale","c":"Pharaohs & Royals","m":"1Lww2GKAf8rR5IhNamiGkbUyUDYURi7Sq"},"UK-085":{"t":"Tutankhamun Standing Statue","d":"Approx. 20 cm tall · shown in hand for scale","c":"Pharaohs & Royals","m":"1oaLbjkF_c1dcNw1ViPMyS8phZOmDaye8"},"UK-086":{"t":"Isis Throne-Crown Statue – Black","d":"Approx. 20 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"1Ua7ZyoFlZ0E_i0G_d6uLqjJaTA7aUIjZ"},"UK-087":{"t":"Black Ushabti Figure","d":"Approx. 15 cm tall · shown in hand for scale","c":"Ushabti Figures","m":"1MyQABCUCej9Uiavq4gMTttGa9-TM2dmi"},"UK-088":{"t":"Isis Standing Statue – Black","d":"Approx. 20 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"1m8h46NkPjGVnmVq_BFhie-kZmdXbh5uQ"},"UK-089":{"t":"Bastet Sacred Cat – Bronze Tone","d":"Approx. 18 cm tall · shown in hand for scale","c":"Sacred Animals","m":"1yVyJoNPMeIr_gOK5VvQykgxExdg_NsOB"},"UK-090":{"t":"Horus Falcon Statue – Dark Stone","d":"Approx. 16 cm tall · shown in hand for scale","c":"Sacred Animals","m":"1C1tcqNvyCkHpKfhApsunbtrTIVnzNoUM"},"UK-091":{"t":"Sekhmet Standing Statue – Black","d":"Approx. 22 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"1_Fa8Ow9rRM0QsJ0C6oUQun_kTawsLEC5"},"UK-092":{"t":"Ra-Horakhty Statue – Blue & Gold","d":"Approx. 22 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"18elszWFPEe-sslkxp-rnUr4qO0BN8moV"},"UK-093":{"t":"Sekhmet Seated on Throne","d":"Approx. 18 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"1ovlQeKVDEqHfsGPtUYWNXosWnC_DBE3q"},"UK-094":{"t":"Pharaoh Standing Statue – Grey","d":"Approx. 22 cm tall · shown in hand for scale","c":"Pharaohs & Royals","m":"1vVCflTJSd45cnAGpdwJxhSZnNxk-653e"},"UK-095":{"t":"Anubis Standing Statue – Black","d":"Approx. 22 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"18ZmLiyrbLHyimvB6ee6jECF_qqAw5-aV"},"UK-096":{"t":"Osiris Standing Statue – Red Stone","d":"Approx. 20 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"1HozfqdKftMZ2oJnPf7W5kii4TcOWVfJu"},"UK-097":{"t":"Ptah Standing Statue – Black","d":"Approx. 22 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"1bcXryzErsMYuy84gV17wYeJb44HZig0t"},"UK-098":{"t":"Anubis Standing Statue – Black","d":"Approx. 20 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"1ncTltnfFmLvEP1k3nWS-04uTd5xBu5lm"},"UK-099":{"t":"Isis-Hathor Statue – Blue & Gold","d":"Approx. 22 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"10MQr90AQKkjRMVP_QMa4hgWFswiIuJBg"},"UK-100":{"t":"Ankh on Pedestal – Black","d":"Approx. 18 cm tall · shown in hand for scale","c":"Amulets & Symbols","m":"1uZkxe5pYqkKD8wU4UceBX2CDF_GXglKs"},"UK-101":{"t":"Hathor Standing Statue – Black","d":"Approx. 22 cm tall · shown in hand for scale","c":"Gods & Goddesses","m":"1uXcMsO0F8AFdG8IU16s-WAOYdlamculs"},"UK-102":{"t":"Bastet Sacred Cat – Dark Red","d":"Approx. 18 cm tall · shown in hand for scale","c":"Sacred Animals","m":"1bA4ySJw8a9uYZ24zuzWW_36r_LwGIFSA"},"UK-103":{"t":"Pharaoh with Gold Nemes – Black","d":"Approx. 22 cm tall · shown in hand for scale","c":"Pharaohs & Royals","m":"1oAhBGaRteUzMiBbtXgEtOVIaJVia2v8k"},"UK-104":{"t":"Sacred Scarab Beetle – Blue","d":"Approx. 8 cm wide · shown in hand for scale","c":"Amulets & Symbols","m":"121GzY0F4FoHn2VxmyqDvh160R1o0SFZw"},"UK-105":{"t":"Egyptian Head Sculpture","d":"Approx. 10 cm tall · shown in hand for scale","c":"Busts & Heads","m":"1LZdw4DObmED1Zst8jSp5sGs_8HsEjYb1"},"UK-106":{"t":"Black Ushabti Figure","d":"Approx. 15 cm tall · shown in hand for scale","c":"Ushabti Figures","m":"15-quBkBEve49nmiJiqvwK191ecsCKOh1"},"UK-107":{"t":"Green Ushabti Figure","d":"Approx. 15 cm tall · shown in hand for scale","c":"Ushabti Figures","m":"1deOp5pbLNLgWBxGZFDW-MhyB34XJjNsU"},"UK-108":{"t":"Black Ushabti Figure","d":"Approx. 14 cm tall · shown in hand for scale","c":"Ushabti Figures","m":"1GN86mIJBt2vGrBYaF7jVyymQw6ug6Lh5"},"UK-109":{"t":"Brown Ushabti Figure","d":"Approx. 14 cm tall · shown in hand for scale","c":"Ushabti Figures","m":"10y4U4ChvQfCojRjmzXpnLT6hjpzaEZI1"},"UK-110":{"t":"Turquoise Faience-Style Ushabti","d":"Approx. 15 cm tall · shown in hand for scale","c":"Ushabti Figures","m":"1oljXKc4hOW9hzYOwdZ4zHsU3aZ8dlZ2r"},"UK-111":{"t":"Green Ushabti Figure","d":"Approx. 15 cm tall · shown in hand for scale","c":"Ushabti Figures","m":"1_TPkVFROZ8E22IhgtXn40FPrF0JspmoX"},"UK-112":{"t":"Black Ushabti Figure","d":"Approx. 15 cm tall · shown in hand for scale","c":"Ushabti Figures","m":"1cnzpnCYGTTzQBzFlL0HCzUjdsWPtAgFl"},"UK-113":{"t":"Blue Painted Ushabti Figure","d":"Approx. 18 cm tall · shown in hand for scale","c":"Ushabti Figures","m":"1ihJBBDuSch8L_m6UopP2N8v6WG6xzVAU"},"UK-114":{"t":"Brown Painted Ushabti Figure","d":"Approx. 15 cm tall · shown in hand for scale","c":"Ushabti Figures","m":"1bCbDP1oJAil4_-3J86FFxsDrznm0XVVO"},"UK-115":{"t":"Blue Ushabti Figure","d":"Approx. 15 cm tall · shown in hand for scale","c":"Ushabti Figures","m":"1BrnQDW6evZhCm_cVQ9X5131WwiBYGEh4"},"UK-116":{"t":"Winged Scarab – Black","d":"Approx. 12 cm wide · shown in hand for scale","c":"Amulets & Symbols","m":"1I2GlxojybnUjFQ_OIjrHkmxhZUCb7xJi"},"UK-117":{"t":"Winged Scarab – Red & Blue","d":"Approx. 20 cm wide · shown in hand for scale","c":"Amulets & Symbols","m":"1-FguBSzgVix23fahs2rgYzI0w25xqctD"},"UK-118":{"t":"Winged Scarab – Turquoise","d":"Approx. 20 cm wide · shown in hand for scale","c":"Amulets & Symbols","m":"1FTKp69Y0aFplcTfbpIofEM06iKcVoIED"},"UK-119":{"t":"Hathor Sistrum – Blue","d":"Approx. 25 cm tall · shown in hand for scale","c":"Sistrums & Sceptres","m":"1QmUACJfNzx1CqkZCjr-J-O0tMUcTIo7V"},"UK-120":{"t":"Hathor Sistrum – Blue","d":"Approx. 25 cm tall · shown in hand for scale","c":"Sistrums & Sceptres","m":"1PxyOkgIvZ2X2R7qGfm70_hdajUJfBo0t"},"UK-121":{"t":"Naos Sistrum – Blue & Gold","d":"Approx. 25 cm tall · shown in hand for scale","c":"Sistrums & Sceptres","m":"1tNOLnbqzQfKLwaA1l1uK8dA4boEvefD7"},"UK-122":{"t":"Naos Sistrum – White & Silver","d":"Approx. 25 cm tall · shown in hand for scale","c":"Sistrums & Sceptres","m":"16hJf9EGUJ3FCVquiuJ0kKVDZUZJ__cr-"},"UK-123":{"t":"Naos Sistrum – Black","d":"Approx. 25 cm tall · shown in hand for scale","c":"Sistrums & Sceptres","m":"1UnKwb-sEhZhRP3hepqUrz3tQQ4NrkHtu"},"UK-124":{"t":"Naos Sistrum – Blue & Gold","d":"Approx. 25 cm tall · shown in hand for scale","c":"Sistrums & Sceptres","m":"1F9F8V_Ok4_CxUBO82KXxjXX4NVN0YAUz"},"UK-125":{"t":"Akhenaten Head Sculpture","d":"Approx. 20 cm tall · shown in hand for scale","c":"Busts & Heads","m":"1kXDDim7_fZVXCsZCMwqpFOWRh6-QKejX"},"UK-126":{"t":"Queen Nefertiti Bust","d":"Approx. 20 cm tall · shown in hand for scale","c":"Busts & Heads","m":"1RE12-hkm19_VIQdjQdgwOvwFoCbgaWxT"},"UK-127":{"t":"Anubis Relief Plaque","d":"Approx. 20 cm wide · shown in hand for scale","c":"Amulets & Symbols","m":"1nuzVjvOC_a20Ynn36qQBzZ0wBTpzd3vj"},"UK-128":{"t":"Openwork Egyptian Wall Plaque","d":"Approx. 15 cm tall · shown in hand for scale","c":"Amulets & Symbols","m":"1cDboC1uk1hN2AanrIdg3kSeLvoBRJfzp"},"UK-129":{"t":"Brass Sistrum","d":"Approx. 30 cm tall · shown in hand for scale","c":"Sistrums & Sceptres","m":"1ymFK1leylAxH4GlwOr0tsQY_sfzgHqif"},"UK-130":{"t":"Brass Sistrum","d":"Approx. 30 cm tall · shown in hand for scale","c":"Sistrums & Sceptres","m":"1UYmS6Uqp3jMNWXB4pwz7iUDRHNn2vYSv"},"UK-131":{"t":"Brass Ankh Wand","d":"Approx. 30 cm tall · shown in hand for scale","c":"Sistrums & Sceptres","m":"1Kum7PWqDQtJw_AHC09jZrMNbu_wRu0nn"},"UK-132":{"t":"Brass Sistrum","d":"Approx. 30 cm tall · shown in hand for scale","c":"Sistrums & Sceptres","m":"15v2BosNiQ26OW1KQyu4XKG8NcF1Tx5TW"},"UK-133":{"t":"Brass Ankh Wand","d":"Approx. 30 cm tall · shown in hand for scale","c":"Sistrums & Sceptres","m":"1BPjYahuiv8rDfzn5qTWLrUsQ51YulxTN"},"UK-134":{"t":"Brass Lotus Sceptre","d":"Approx. 35 cm tall · shown in hand for scale","c":"Sistrums & Sceptres","m":"1CMRBp2mTOzpE8-RM-9zwCMsxRqLZuiwq"},"UK-135":{"t":"Brass Lotus Sistrum","d":"Approx. 30 cm tall · shown in hand for scale","c":"Sistrums & Sceptres","m":"1jdd2_8vHLa0kgwINefDAJi69aa59GMmH"},"UK-136":{"t":"Brass Sistrum","d":"Approx. 30 cm tall · shown in hand for scale","c":"Sistrums & Sceptres","m":"1XteUDj5k2_uQDoVmwoc8RdoGDyYLT4yp"},"UK-137":{"t":"Bastet Sacred Cat – Blue","d":"Approx. 20 cm tall · shown in hand for scale","c":"Sacred Animals","m":"1fEdWol_8RzQjNlk9pXPPtnGNJWlUfII2"},"UK-138":{"t":"Bastet Sacred Cat – Silver Grey","d":"Approx. 20 cm tall · shown in hand for scale","c":"Sacred Animals","m":"1g_AFAZaz9SSPxmcwCQERh9l1LTPf5gTz"},"UK-139":{"t":"Egyptian Ring – Blue Stone","d":"Ring · shown on hand for scale","c":"Jewellery","m":"1NeIEpfz_oIz7m6NYG4K76eQeGUwe_ihA"},"UK-140":{"t":"Egyptian Scarab Ring","d":"Ring · shown on hand for scale","c":"Jewellery","m":"1TjfHTSi_x_tA2QM98Txftq7KPuhDJhoH"},"UK-141":{"t":"Egyptian Ring – Red & Blue Stone","d":"Ring · shown on hand for scale","c":"Jewellery","m":"1yxjR70TGIV8VnUEzgRk1ea4EYMeHl4ff"},"UK-142":{"t":"Egyptian Gold-Tone Ring","d":"Ring · shown on hand for scale","c":"Jewellery","m":"1inHpLAZR-tGEMZwaX-qHUOuxH3eOwwOt"},"UK-143":{"t":"Egyptian Cartouche Ring – Gold Tone","d":"Ring · shown on hand for scale","c":"Jewellery","m":"1pUKa2EyGEeu0oeKjibz9DUEGIf2d0CFs"},"UK-144":{"t":"Egyptian Silver-Tone Ring","d":"Ring · shown on hand for scale","c":"Jewellery","m":"1KNfGPBBF_2tbJGD8_YoK4K1CPjhhJSyi"},"UK-145":{"t":"Egyptian Cartouche Ring – Gold Tone","d":"Ring · shown on hand for scale","c":"Jewellery","m":"18lD-ZXBzGmB6-OyqsEovabVl_OQ8GLSo"},"UK-146":{"t":"Egyptian Silver-Tone Ring","d":"Ring · shown on hand for scale","c":"Jewellery","m":"1XzZ_IjAvbXIAb7WN8aPe_uGYwnxj_xl2"},"UK-147":{"t":"Egyptian Ring – Rose Tone","d":"Ring · shown on hand for scale","c":"Jewellery","m":"1QNLYGgaiXvU4r02CuLbjgK5rtqvH5nKN"},"UK-148":{"t":"Egyptian Coin Pendant – Gold Tone","d":"Pendant · shown on hand for scale","c":"Jewellery","m":"11uzv61QOhjN7MXybYSjEwdrBv7O5dEiw"},"UK-149":{"t":"Egyptian Heart Pendant – Gold Tone","d":"Pendant · shown on hand for scale","c":"Jewellery","m":"1BoFpYfJxoMUJHeHp6B7WcwRCXcZUCCgh"}};
+const IGNORE_SHEET_TEXT = ["Handwoven Vintage Kilim Rug","Artisanal Hammered Brass Pendant Lamp"]; // old sample rows
+const PAGE = 24;
+const gbp = new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP',maximumFractionDigits:2});
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const img = (id,w) => `https://lh3.googleusercontent.com/d/${id}=w${w||600}`;
+const priceTxt = p => p>0 ? gbp.format(p) : 'Price on request';
+const ICON_PLUS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>';
+const ICON_SIZE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 11V6a2 2 0 0 1 4 0v5M11 10V4a2 2 0 0 1 4 0v6M15 10V6a2 2 0 0 1 4 0v8a7 7 0 0 1-7 7h-1a7 7 0 0 1-6-3.5L3 14a2 2 0 0 1 3.4-2L7 13"/></svg>';
 
-  const gbp = new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' });
-  let allProducts = [];
-  let cart = {};
-  let loaded = false;
+let ALL=[], VIEW=[], shown=0, cat='All', order=JSON.parse(sessionStorage.getItem('ahm-order')||'[]');
+let loaded=false;
 
-  const $ = id => document.getElementById(id);
-  const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const imgUrl = (id, size) => "https://lh3.googleusercontent.com/d/" + id + "=w" + (size || 700);
-  const priceText = p => p > 0 ? gbp.format(p) : 'Price on request';
+/* top bar */
+addEventListener('scroll',()=>$('#topbar').classList.toggle('solid',scrollY>40),{passive:true});
 
-  function showError(msg) {
-    $('statusMsg').style.display = 'block';
-    $('statusMsg').className = '';
-    $('statusMsg').innerHTML = '<div class="error-box">' + msg + '</div>';
-    $('itemCounter').textContent = '';
-  }
-
-  window.handleSheetResponse = function(response) {
-    loaded = true;
-    if (!response || response.status === 'error' || !response.table) {
-      showError('<strong>Catalog temporarily unavailable.</strong><br>Please contact us on WhatsApp: +44 7717 583790');
-      return;
-    }
-
-    allProducts = [];
-    (response.table.rows || []).forEach(r => {
-      const cells = r.c || [];
-      const val = i => (cells[i] && cells[i].v != null) ? String(cells[i].v).trim() : '';
-      const code = val(0).toUpperCase();
-      const status = val(5).toLowerCase();
-      const urlsRaw = val(6);
-      if (!code || code === 'CODE' || status !== 'available' || !urlsRaw) return;
-
-      const ids = urlsRaw.split(',')
-        .map(u => { const m = u.trim().match(/\/d\/([a-zA-Z0-9_-]+)/) || u.trim().match(/[?&]id=([a-zA-Z0-9_-]+)/); return m ? m[1] : ''; })
-        .filter(Boolean);
-      if (!ids.length) return;
-
-      const price = (cells[4] && typeof cells[4].v === 'number') ? cells[4].v : (parseFloat(val(4).replace(/[^0-9.]/g, '')) || 0);
-
-      allProducts.push({
-        code,
-        title: val(1) || ('Egyptian Artifact ' + code),
-        material: val(2) || 'Handcrafted Stone',
-        dimensions: val(3) || 'Standard Size',
-        price,
-        ids
-      });
-    });
-
-    if (!allProducts.length) {
-      showError('No items are available right now. Please contact us on WhatsApp: +44 7717 583790');
-      return;
-    }
-
-    $('statusMsg').style.display = 'none';
-    const sel = $('materialFilter');
-    [...new Set(allProducts.map(p => p.material))].sort().forEach(m => {
-      const opt = document.createElement('option');
-      opt.value = m; opt.textContent = m;
-      sel.appendChild(opt);
-    });
-    filterProducts();
-  };
-
-  function renderGrid(list) {
-    const grid = $('grid');
-    $('itemCounter').textContent = `Showing ${list.length} available item(s)`;
-    if (!list.length) {
-      grid.innerHTML = '<p style="grid-column:1/-1; text-align:center; color:#78716c; padding:40px;">No available items match your search.</p>';
-      return;
-    }
-    grid.innerHTML = list.map(p => {
-      const c = esc(p.code);
-      const thumbs = p.ids.length > 1
-        ? `<div class="thumbs">${p.ids.map((id, i) => `<img src="${imgUrl(id, 150)}" loading="lazy" alt="" class="${i === 0 ? 'active' : ''}" data-thumb="${c}" data-id="${id}">`).join('')}</div>`
-        : '';
-      const inCart = !!cart[p.code];
-      return `
-        <div class="card">
-          <div class="img-wrap" data-open="${c}">
-            <span class="sku-badge">CODE: ${c}</span>
-            <img id="main-${c}" src="${imgUrl(p.ids[0], 600)}" loading="lazy" alt="${esc(p.title)}">
-          </div>
-          ${thumbs}
-          <div class="card-body">
-            <div class="title">${esc(p.title)}</div>
-            <div class="meta">Material: ${esc(p.material)}</div>
-            <div class="meta">Dimensions: ${esc(p.dimensions)}</div>
-            <div class="price ${p.price > 0 ? '' : 'poa'}">${priceText(p.price)}</div>
-            <button class="btn-add ${inCart ? 'added' : ''}" data-cart="${c}">${inCart ? 'ADDED ✓' : 'ADD TO ORDER'}</button>
-          </div>
-        </div>`;
-    }).join('');
-  }
-
-  function filterProducts() {
-    const q = $('searchInput').value.toLowerCase().trim();
-    const mat = $('materialFilter').value;
-    const sort = $('sortSelect').value;
-    const list = allProducts.filter(p =>
-      (p.code.toLowerCase().includes(q) || p.title.toLowerCase().includes(q)) && (!mat || p.material === mat));
-    list.sort((a, b) =>
-      sort === 'price-asc' ? a.price - b.price :
-      sort === 'price-desc' ? b.price - a.price :
-      a.code.localeCompare(b.code, undefined, { numeric: true }));
-    renderGrid(list);
-  }
-
-  function toggleCart(code) {
-    const p = allProducts.find(x => x.code === code);
-    if (!p) return;
-    if (cart[code]) delete cart[code]; else cart[code] = p;
-    updateCartUI();
-  }
-
-  function updateCartUI() {
-    const items = Object.values(cart);
-    $('cartBar').classList.toggle('visible', items.length > 0);
-    document.body.classList.toggle('has-cart', items.length > 0);
-    if (items.length) {
-      const total = items.reduce((s, i) => s + i.price, 0);
-      const poa = items.some(i => i.price <= 0);
-      $('cartCount').textContent = `${items.length} item(s) selected`;
-      $('cartTotal').textContent = `Estimated total: ${gbp.format(total)}${poa ? ' + items on request' : ''}`;
-    }
-    document.querySelectorAll('[data-cart]').forEach(btn => {
-      const inCart = !!cart[btn.dataset.cart];
-      btn.classList.toggle('added', inCart);
-      btn.textContent = inCart ? 'ADDED ✓' : 'ADD TO ORDER';
-    });
-  }
-
-  function openModal(code) {
-    const p = allProducts.find(x => x.code === code);
-    if (!p) return;
-    $('modalMain').src = imgUrl(p.ids[0], 1000);
-    $('modalMain').alt = p.title;
-    $('modalCode').textContent = 'CODE: ' + p.code;
-    $('modalTitle').textContent = p.title;
-    $('modalMat').textContent = 'Material: ' + p.material;
-    $('modalDim').textContent = 'Dimensions: ' + p.dimensions;
-    $('modalPrice').textContent = priceText(p.price);
-    $('modalThumbs').innerHTML = p.ids.map((id, i) =>
-      `<img src="${imgUrl(id, 150)}" alt="" class="${i === 0 ? 'active' : ''}" data-modal-id="${id}">`).join('');
-    const btn = $('modalAddBtn');
-    btn.textContent = cart[code] ? 'REMOVE FROM ORDER' : 'ADD TO ORDER';
-    btn.className = 'btn-add ' + (cart[code] ? 'added' : '');
-    btn.onclick = () => { toggleCart(code); closeModal(); };
-    $('modal').classList.add('open');
-  }
-
-  function closeModal() { $('modal').classList.remove('open'); }
-
-  function sendWhatsApp() {
-    const items = Object.values(cart);
-    if (!items.length) return;
-    let msg = "Hello AHM Bazaar, I would like to order / enquire about the following items:\n\n";
-    items.forEach((it, i) => { msg += `${i + 1}. *${it.code}* - ${it.title} (${priceText(it.price)})\n`; });
-    msg += `\n*Estimated Total:* ${gbp.format(items.reduce((s, i) => s + i.price, 0))}`;
-    window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(msg)}`, '_blank');
-  }
-
-  // Events
-  $('searchInput').addEventListener('input', filterProducts);
-  $('materialFilter').addEventListener('change', filterProducts);
-  $('sortSelect').addEventListener('change', filterProducts);
-  $('clearBtn').addEventListener('click', () => { cart = {}; updateCartUI(); });
-  $('waBtn').addEventListener('click', sendWhatsApp);
-  $('closeBtn').addEventListener('click', closeModal);
-  $('modal').addEventListener('click', e => { if (e.target === $('modal')) closeModal(); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-
-  $('grid').addEventListener('click', e => {
-    const t = e.target;
-    if (t.dataset.cart) return toggleCart(t.dataset.cart);
-    if (t.dataset.thumb) {
-      $('main-' + t.dataset.thumb).src = imgUrl(t.dataset.id, 600);
-      t.parentElement.querySelectorAll('img').forEach(i => i.classList.remove('active'));
-      t.classList.add('active');
-      return;
-    }
-    const wrap = t.closest('[data-open]');
-    if (wrap) openModal(wrap.dataset.open);
+/* load sheet */
+window.onSheet = function(res){
+  loaded=true;
+  if(!res||res.status==='error'||!res.table){ return fail(); }
+  ALL=[];
+  res.table.rows.forEach(r=>{
+    const c=r.c||[]; const v=i=>(c[i]&&c[i].v!=null)?String(c[i].v).trim():'';
+    const code=v(0).toUpperCase(); if(!code||code==='CODE') return;
+    if(v(5).toLowerCase()!=='available') return;
+    let ids=v(6).split(',').map(u=>{const m=u.match(/\/d\/([\w-]+)/)||u.match(/[?&]id=([\w-]+)/);return m?m[1]:''}).filter(Boolean);
+    if(!ids.length) return;
+    const info=INFO[code]||{};
+    const sample=IGNORE_SHEET_TEXT.includes(v(1));
+    if(info.m && ids.includes(info.m)) ids=[info.m,...ids.filter(x=>x!==info.m)];
+    const price=sample?0:((c[4]&&typeof c[4].v==='number')?c[4].v:(parseFloat(v(4).replace(/[^0-9.]/g,''))||0));
+    ALL.push({code, ids, price,
+      title:(!sample&&v(1))||info.t||('Egyptian Artifact '+code),
+      mat:sample?'':v(2),
+      size:(!sample&&v(3))||info.d||'',
+      cat:info.c||'Collection'});
   });
+  if(!ALL.length) return fail();
+  order=order.filter(c=>ALL.some(p=>p.code===c));
+  $('#statCount').textContent=ALL.length;
+  buildChips(); apply(); updateOrder();
+};
+function fail(){
+  $('#count').textContent='';
+  $('#grid').innerHTML='<div class="err"><b style="font-family:Cinzel;color:#f3dca4">The collection is being updated</b><br>Please message us on WhatsApp and we will send you the full catalogue: <a style="color:#d9b46a" href="https://wa.me/'+WHATSAPP+'">+44 7717 583790</a></div>';
+}
+(function(){const s=document.createElement('script');
+  s.src=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=responseHandler:onSheet&sheet=${encodeURIComponent(SHEET_TAB)}&t=${Date.now()}`;
+  s.onerror=fail; document.body.appendChild(s);
+  setTimeout(()=>{if(!loaded)fail()},15000);
+  /* skeletons */
+  $('#grid').innerHTML=Array.from({length:8},()=>'<div class="card in"><div class="frame"><div class="shim"></div></div><div class="body"><div class="cat">&nbsp;</div><div class="title">&nbsp;</div></div></div>').join('');
+})();
 
-  $('modalThumbs').addEventListener('click', e => {
-    const id = e.target.dataset.modalId;
-    if (!id) return;
-    $('modalMain').src = imgUrl(id, 1000);
-    $('modalThumbs').querySelectorAll('img').forEach(i => i.classList.remove('active'));
-    e.target.classList.add('active');
-  });
+/* chips */
+function buildChips(){
+  const counts={}; ALL.forEach(p=>counts[p.cat]=(counts[p.cat]||0)+1);
+  const cats=['All',...Object.keys(counts).sort((a,b)=>counts[b]-counts[a])];
+  $('#chips').innerHTML=cats.map(c=>`<button class="chip ${c===cat?'on':''}" data-cat="${esc(c)}">${esc(c)}<small>${c==='All'?ALL.length:counts[c]}</small></button>`).join('');
+}
+$('#chips').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;cat=b.dataset.cat;
+  document.querySelectorAll('.chip').forEach(x=>x.classList.toggle('on',x===b));apply(true)});
+let qt; $('#q').addEventListener('input',()=>{clearTimeout(qt);qt=setTimeout(()=>apply(true),160)});
+$('#sort').addEventListener('change',()=>apply(true));
 
-  // Load data from Google Sheets
-  (function loadSheet() {
-    const s = document.createElement('script');
-    s.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=responseHandler:handleSheetResponse&sheet=${encodeURIComponent(SHEET_NAME)}&t=${Date.now()}`;
-    s.onerror = () => showError('<strong>Could not load the catalog.</strong><br>Please check your connection or contact us on WhatsApp: +44 7717 583790');
-    document.body.appendChild(s);
-    setTimeout(() => { if (!loaded) showError('<strong>Catalog is taking too long to load.</strong><br>Please refresh, or contact us on WhatsApp: +44 7717 583790'); }, 15000);
-  })();
+function apply(scroll){
+  const q=$('#q').value.trim().toLowerCase(), s=$('#sort').value;
+  VIEW=ALL.filter(p=>(cat==='All'||p.cat===cat)&&(!q||(p.code+' '+p.title+' '+p.cat+' '+p.mat).toLowerCase().includes(q)));
+  VIEW.sort((a,b)=>s==='az'?a.title.localeCompare(b.title):s==='lo'?(a.price||1e9)-(b.price||1e9):s==='hi'?b.price-a.price:a.code.localeCompare(b.code,undefined,{numeric:true}));
+  $('#count').textContent=`${VIEW.length} piece${VIEW.length===1?'':'s'}${cat!=='All'?' in '+cat:''}`;
+  shown=0; $('#grid').innerHTML='';
+  if(!VIEW.length){$('#grid').innerHTML='<div class="empty"><b>Nothing found</b>Try another name or code, or ask us on WhatsApp.</div>';$('#moreBtn').hidden=true;return}
+  more();
+  if(scroll){const y=$('#collection').getBoundingClientRect().top+scrollY-10; if(scrollY>y) scrollTo({top:y,behavior:'smooth'})}
+}
+function more(){
+  const slice=VIEW.slice(shown,shown+PAGE); shown+=slice.length;
+  const frag=document.createElement('div');
+  frag.innerHTML=slice.map(card).join('');
+  [...frag.children].forEach((el,i)=>{el.style.transitionDelay=(i%4)*70+'ms';$('#grid').appendChild(el);io.observe(el);
+    el.querySelectorAll('.frame img').forEach(im=>{const ok=()=>im.classList.add('ok');im.complete&&im.naturalWidth?ok():im.addEventListener('load',ok,{once:true})})});
+  $('#moreBtn').hidden=shown>=VIEW.length;
+}
+$('#moreBtn').addEventListener('click',more);
+const autoMore=new IntersectionObserver(e=>{if(e[0].isIntersecting&&shown<VIEW.length)more()},{rootMargin:'600px'});
+autoMore.observe($('#moreBtn').parentElement);
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{rootMargin:'0px 0px -40px'});
+
+function card(p){
+  const on=order.includes(p.code);
+  return `<article class="card" data-code="${esc(p.code)}">
+    <div class="frame" data-open>
+      <img class="main" src="${img(p.ids[0],600)}" alt="${esc(p.title)}" loading="lazy">
+      ${p.ids[1]?`<img class="alt" src="${img(p.ids[1],600)}" alt="" loading="lazy">`:''}
+      <span class="code">${esc(p.code)}</span>
+      <span class="views">${p.ids.length} photos</span>
+    </div>
+    <div class="body">
+      <div class="cat">${esc(p.cat)}</div>
+      <div class="title">${esc(p.title)}</div>
+      ${p.size?`<div class="size">${ICON_SIZE}<span>${esc(p.size.replace(' · shown in hand for scale','').replace(' · shown on hand for scale',''))}</span></div>`:''}
+      <div class="foot">
+        <div class="price ${p.price>0?'':'ask'}">${priceTxt(p.price)}</div>
+        <button class="add ${on?'on':''}" data-add aria-label="Add to order">${ICON_PLUS}</button>
+      </div>
+    </div>
+  </article>`;
+}
+$('#grid').addEventListener('click',e=>{
+  const c=e.target.closest('.card'); if(!c) return;
+  if(e.target.closest('[data-add]')) return toggle(c.dataset.code);
+  if(e.target.closest('[data-open]')||e.target.closest('.title')) openModal(c.dataset.code);
+});
+
+/* order */
+function toggle(code){
+  const i=order.indexOf(code);
+  if(i>-1){order.splice(i,1);toast('Removed from your order')} else {order.push(code);toast('Added to your order ✓')}
+  sessionStorage.setItem('ahm-order',JSON.stringify(order)); updateOrder();
+}
+function updateOrder(){
+  document.querySelectorAll('.card').forEach(c=>c.querySelector('.add')?.classList.toggle('on',order.includes(c.dataset.code)));
+  const items=order.map(c=>ALL.find(p=>p.code===c)).filter(Boolean);
+  document.body.classList.toggle('has-order',items.length>0);
+  $('#orderbar').classList.toggle('show',items.length>0);
+  if(!items.length) return;
+  $('#obThumbs').innerHTML=items.slice(-4).map(p=>`<img src="${img(p.ids[0],120)}" alt="">`).join('');
+  $('#obCount').textContent=`${items.length} piece${items.length>1?'s':''} selected`;
+  const tot=items.reduce((s,p)=>s+p.price,0), ask=items.some(p=>!p.price);
+  $('#obTotal').textContent=tot?`${gbp.format(tot)}${ask?' + prices on request':''}`:'Prices confirmed on WhatsApp';
+  if(modalCode) setAddBtn(modalCode);
+}
+$('#obClear').addEventListener('click',()=>{order=[];sessionStorage.removeItem('ahm-order');updateOrder();toast('Order cleared')});
+$('#obSend').addEventListener('click',()=>{
+  const items=order.map(c=>ALL.find(p=>p.code===c)).filter(Boolean); if(!items.length) return;
+  let m="Hello AHM Bazaar 👋\nI'd like to order the following pieces from your catalogue:\n\n";
+  items.forEach((p,i)=>m+=`${i+1}. *${p.code}* – ${p.title} (${priceTxt(p.price)})\n`);
+  const tot=items.reduce((s,p)=>s+p.price,0);
+  if(tot) m+=`\n*Estimated total:* ${gbp.format(tot)}`;
+  m+="\n\nPlease confirm availability and delivery. Thank you!";
+  open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(m)}`,'_blank');
+});
+let tt; function toast(t){const el=$('#toast');el.textContent=t;el.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>el.classList.remove('show'),1600)}
+
+/* modal + gallery */
+let modalCode=null, idx=0, cur=null;
+function openModal(code){
+  cur=ALL.find(p=>p.code===code); if(!cur) return; modalCode=code; idx=0;
+  $('#track').innerHTML=cur.ids.map((id,i)=>`<div class="slide"><img src="${img(id,1400)}" alt="${esc(cur.title)} – photo ${i+1}" ${i>1?'loading="lazy"':''}></div>`).join('');
+  $('#strip').innerHTML=cur.ids.map((id,i)=>`<img src="${img(id,140)}" data-i="${i}" alt="">`).join('');
+  $('#mCat').textContent=cur.cat; $('#mTitle').textContent=cur.title; $('#mCode').textContent=cur.code;
+  $('#mSize').textContent=(cur.size||'—').replace(' · ',' — ');
+  $('#mMatRow').style.display=cur.mat?'':'none'; $('#mMat').textContent=cur.mat;
+  $('#mPrice').innerHTML=`<div class="big-price ${cur.price>0?'':'ask'}">${priceTxt(cur.price)}</div>`;
+  $('#mAsk').href=`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(`Hello AHM Bazaar, I'm interested in *${cur.code}* – ${cur.title}. Is it available?`)}`;
+  setAddBtn(code); go(0,true);
+  $('#modal').classList.add('open'); document.documentElement.style.overflow='hidden';
+  history.replaceState(null,'','#'+code);
+}
+function setAddBtn(code){const on=order.includes(code);
+  $('#mAdd').innerHTML=on?'✓ In your order — tap to remove':`${ICON_PLUS} Add to my order`;}
+$('#mAdd').addEventListener('click',()=>toggle(modalCode));
+function closeModal(){ $('#modal').classList.remove('open'); document.documentElement.style.overflow=''; modalCode=null; history.replaceState(null,'',location.pathname+location.search); }
+document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',closeModal));
+function go(i,instant){
+  if(!cur) return; idx=(i+cur.ids.length)%cur.ids.length;
+  const t=$('#track'); if(instant){t.style.transition='none';requestAnimationFrame(()=>t.style.transition='')}
+  t.style.transform=`translateX(${-idx*100}%)`;
+  $('#mCounter').textContent=`${idx+1} / ${cur.ids.length}`;
+  document.querySelectorAll('#strip img').forEach((im,k)=>im.classList.toggle('on',k===idx));
+  const on=document.querySelector('#strip img.on'); on&&on.scrollIntoView({block:'nearest',inline:'center',behavior:instant?'auto':'smooth'});
+}
+$('#prev').addEventListener('click',()=>go(idx-1)); $('#next').addEventListener('click',()=>go(idx+1));
+$('#strip').addEventListener('click',e=>{if(e.target.dataset.i)go(+e.target.dataset.i)});
+addEventListener('keydown',e=>{if(!modalCode)return; if(e.key==='Escape')closeModal(); if(e.key==='ArrowRight')go(idx+1); if(e.key==='ArrowLeft')go(idx-1)});
+(function swipe(){let x0=null,y0=null;const st=$('#stage');
+  st.addEventListener('touchstart',e=>{x0=e.touches[0].clientX;y0=e.touches[0].clientY},{passive:true});
+  st.addEventListener('touchend',e=>{if(x0===null)return;const dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;
+    if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy))go(idx+(dx<0?1:-1));x0=null},{passive:true});})();
+/* open shared link like .../#UK-045 */
+const wait=setInterval(()=>{if(ALL.length){clearInterval(wait);const h=decodeURIComponent(location.hash.slice(1)).toUpperCase();if(/^UK-\d+$/.test(h))openModal(h)}},200);
+setTimeout(()=>clearInterval(wait),20000);
 </script>
 </body>
 </html>
